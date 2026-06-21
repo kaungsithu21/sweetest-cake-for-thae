@@ -21,12 +21,10 @@
         </div>
 
         <div id="main-game" class="hidden">
-            <h2 id="instruction" class="game-instruction">Blow the candles & Drag bright sprinkles to decorate! 🌟🎂</h2>
+            <h2 id="instruction" class="game-instruction">Type the magic word to extinguish the candles! 🎂✨</h2>
 
             <div class="cake-area" id="cake-drop-zone" ondragover="allowDrop(event)" ondrop="dropTopping(event)">
-                
-                <div class="cake-container-3d">
-                    
+                <div class="cake-container-real">
                     <div class="candles-group">
                         <div class="candle c-pink" id="candle-1"><div class="flame"></div><div class="smoke"></div></div>
                         <div class="candle c-blue" id="candle-2"><div class="flame"></div><div class="smoke"></div></div>
@@ -34,32 +32,26 @@
                         <div class="candle c-green" id="candle-4"><div class="flame"></div><div class="smoke"></div></div>
                     </div>
 
-                    <div class="cake-body-chocolate">
-                        <div class="frosting-top"></div>
-                        <div class="side-sprinkles">
-                            <span class="sp sp1">⭐</span><span class="sp sp2">🔴</span>
-                            <span class="sp sp3">🔷</span><span class="sp sp4">⭐</span>
-                            <span class="sp sp5">💛</span><span class="sp sp6">🟢</span>
-                        </div>
+                    <div class="cake-real-body">
+                        <img src="https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=600&auto=format&fit=crop" alt="Realistic Chocolate Cake" class="cake-img">
+                        <div class="cake-shadow"></div>
                     </div>
-                    <div class="cake-plate"></div>
                 </div>
 
                 <div class="decorations" id="decorations"></div>
             </div>
 
             <div class="topping-inventory" id="inventory">
-                <p class="inventory-hint">Drag bright toppings onto the cake:</p>
-                <div class="topping-row">
-                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top1">⭐</div>
-                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top2">🍓</div>
-                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top3">🍬</div>
-                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top4">✨</div>
+                <p class="inventory-hint">Type "LOVE" to blow out the candles:</p>
+                <div class="love-input-wrapper">
+                    <input type="text" id="love-code-input" placeholder="Enter 'LOVE' here..." autocomplete="off" oninput="checkLoveCode(this)">
                 </div>
             </div>
         </div>
 
         <div class="wishes hidden" id="wish-message">
+            <div class="hearts-container" id="hearts-rain-zone"></div>
+            
             <div class="photo-frame">
                 <img src="ZNH.jpg" alt="Birthday Person" class="celebrant-img" onerror="showDefaultAvatar(this)">
                 <div class="default-avatar hidden">🎂</div>
@@ -73,7 +65,7 @@
         </div>
     </div>
 
-    <audio id="bg-music" src="BIRTHDAY.mp3" loop></audio>
+    <audio id="bg-music" src="ZNH.mp3"></audio>
 
     <script src="script.js"></script>
 </body>
