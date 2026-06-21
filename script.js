@@ -253,7 +253,7 @@ function initSmoothLetterTypewriter(text) {
             }
 
             charIndex++;
-            setTimeout(typeNextLetter, 45); 
+            setTimeout(typeNextLetter, 50); 
         }
     }
 
