@@ -1,0 +1,355 @@
+body {
+    margin: 0;
+    padding: 0;
+    background: linear-gradient(135deg, #a770ef 0%, #cf8bf3 50%, #fdbb2d 100%);
+    font-family: 'Poppins', sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    overflow: hidden;
+}
+
+/* Elegant Premium Dark Box Container */
+.card-container {
+    background-color: #151515;
+    width: 380px;
+    min-height: 540px;
+    padding: 30px 25px;
+    border-radius: 32px;
+    box-shadow: 0 30px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.1);
+    text-align: center;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    box-sizing: border-box;
+}
+
+.hidden { display: none !important; }
+
+/* Entry Screen */
+#setup-area {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: fadeIn 0.5s ease;
+}
+.gift-icon {
+    font-size: 64px;
+    margin-bottom: 15px;
+    animation: bounceGift 2s infinite ease-in-out;
+}
+@keyframes bounceGift {
+    0%, 100% { transform: translateY(0) rotate(0deg); }
+    50% { transform: translateY(-12px) rotate(5deg); }
+}
+.setup-title {
+    color: #ffffff;
+    font-size: 20px;
+    font-weight: 700;
+    margin: 0 0 8px 0;
+}
+.setup-subtitle {
+    color: #aaa;
+    font-size: 13px;
+    margin: 0 0 25px 0;
+    padding: 0 20px;
+    line-height: 1.4;
+}
+.bake-btn {
+    background: linear-gradient(135deg, #ff4081, #9c27b0);
+    color: #fff;
+    padding: 14px 32px;
+    font-family: 'Poppins', sans-serif;
+    font-weight: 600;
+    font-size: 14px;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    box-shadow: 0 8px 20px rgba(255, 64, 129, 0.3);
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+.bake-btn:hover {
+    transform: scale(1.04);
+    box-shadow: 0 12px 25px rgba(255, 64, 129, 0.5);
+}
+
+/* Game Interface */
+#main-game {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.game-instruction {
+    color: #ffffff;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.5;
+    margin: 0 0 15px 0;
+}
+
+.cake-area {
+    position: relative;
+    width: 280px;
+    height: 240px;
+    margin: 0 auto;
+    z-index: 5;
+}
+
+.cake-container-3d {
+    position: absolute;
+    bottom: 20px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    z-index: 10;
+}
+
+.cake-body-chocolate {
+    position: relative;
+    width: 220px;
+    height: 110px;
+    background: #462c24; 
+    border-radius: 110px / 28px;
+    border-bottom: 5px solid #2d1b16;
+    box-shadow: inset 0 -10px 20px rgba(0,0,0,0.4);
+}
+
+.frosting-top {
+    position: absolute;
+    top: 0;
+    width: 220px;
+    height: 28px;
+    background: #53352c;
+    border-radius: 50%;
+    box-shadow: inset 0 -4px 8px rgba(0,0,0,0.2);
+}
+
+/* Side Sprinkles */
+.side-sprinkles {
+    position: absolute;
+    width: 100%;
+    height: 70px;
+    bottom: 10px;
+    pointer-events: none;
+}
+.sp { position: absolute; font-size: 10px; }
+.sp1 { top: 10px; left: 30px; }
+.sp2 { top: 35px; left: 60px; font-size: 8px;}
+.sp3 { top: 15px; left: 110px; }
+.sp4 { top: 40px; left: 150px; }
+.sp5 { top: 20px; left: 180px; }
+.sp6 { top: 45px; left: 90px; font-size: 7px;}
+
+/* Ceramic Plate */
+.cake-plate {
+    width: 240px;
+    height: 14px;
+    background: #2a2a2a;
+    border-bottom: 4px solid #1a1a1a;
+    border-radius: 50%;
+    margin-left: -10px;
+    margin-top: -12px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
+}
+
+/* Candies System On Cake Top Surface (Clickable pointers disabled) */
+.candles-group {
+    position: absolute;
+    top: -8px; 
+    left: 50%;
+    transform: translateX(-50%);
+    width: 130px;
+    height: 45px;
+    display: flex;
+    justify-content: space-between;
+    z-index: 30; 
+}
+.candle {
+    position: relative;
+    width: 6px;
+    height: 42px;
+    border-radius: 2px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.3);
+    pointer-events: none; /* လက်နဲ့နှိပ်ရင် မီးမငြိမ်းစေရန် တားဆီးထားခြင်း */
+}
+
+.c-pink { background: linear-gradient(135deg, #ff65a3 50%, #fff 50%); background-size: 8px 8px; }
+.c-blue { background: linear-gradient(135deg, #26c6da 50%, #fff 50%); background-size: 8px 8px; }
+.c-yellow { background: linear-gradient(135deg, #ffca28 50%, #ff7043 50%); background-size: 8px 8px; }
+.c-green { background: linear-gradient(135deg, #66bb6a 50%, #fff 50%); background-size: 8px 8px; }
+
+.flame {
+    position: absolute;
+    top: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 10px;
+    height: 14px;
+    background-color: #ff9100;
+    border-radius: 50% 50% 20% 20%;
+    box-shadow: 0 0 12px #ff6d00, 0 0 4px #ffeb3b;
+    animation: flicker 0.1s infinite alternate;
+}
+@keyframes flicker {
+    0% { transform: translateX(-50%) scale(1); }
+    100% { transform: translateX(-50%) scale(1.15) rotate(1deg); }
+}
+
+.smoke {
+    display: none;
+    position: absolute;
+    top: -15px;
+    left: 50%;
+    width: 3px;
+    height: 12px;
+    background-color: rgba(255,255,255,0.4);
+    border-radius: 50%;
+    animation: riseUp 1.2s ease-out forwards;
+}
+@keyframes riseUp {
+    0% { transform: translateX(-50%) translateY(0); opacity: 0.7; }
+    100% { transform: translateX(-10%) translateY(-25px) scale(2); opacity: 0; filter: blur(1px); }
+}
+
+/* Toppings Inventory Panel */
+.topping-inventory {
+    background: #1f1f1f;
+    border: 1px solid #2a2a2a;
+    border-radius: 20px;
+    padding: 15px;
+    margin-top: 15px;
+    position: relative;
+    z-index: 40; 
+}
+.inventory-hint {
+    font-size: 11px; 
+    color: #888; 
+    margin: 0 0 10px 0;
+}
+.topping-row {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+}
+.topping-item {
+    font-size: 28px;
+    cursor: grab;
+    transition: transform 0.2s;
+    user-select: none;
+    touch-action: none;
+}
+.topping-item:hover { transform: scale(1.2); }
+
+.decorations {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    pointer-events: none;
+    z-index: 25;
+}
+.dropped-topping {
+    position: absolute;
+    font-size: 24px;
+    transform: translate(-50%, -50%);
+    filter: drop-shadow(0 3px 5px rgba(0,0,0,0.5));
+}
+
+/* --- 🌟 Premium Glassmorphism Wishes Design (ဘောင်ဆိုးကြီးမပါသော ဒီဇိုင်းသစ်) 🌟 --- */
+.wishes { 
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    animation: bounceIn 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+.neon-glow-title {
+    font-size: 26px;
+    font-weight: 700;
+    color: #fff;
+    text-shadow: 0 0 5px #fff, 0 0 12px #ff007f, 0 0 25px #ff007f;
+    margin: 20px 0 15px 0;
+    letter-spacing: 1px;
+}
+
+/* ဗီဒီယိုထဲကအတိုင်း ဘောင်လုံးဝမပါဘဲ သန့်ရှင်းကြည်လင်တောက်ပြောင်သော မှန်နောက်ခံစတိုင် */
+.clean-wish-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    width: 100%;
+    box-sizing: border-box;
+}
+
+/* စာသားများကို သဘာဝကျကျနှင့် ပိုမိုလှပကြည်လင်သော Gradient Color သုံးထားခြင်း */
+.letter-span {
+    display: inline-block;
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    background: linear-gradient(45deg, #ff3399, #ff007f, #b82dd8);
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    opacity: 0;
+    animation: letterFadeIn 0.3s forwards;
+}
+/* ဘောင်ဆိုးကြီးမပါဘဲ သန့်ရှင်းကြည်လင်တောက်ပြောင်သော မှန်နောက်ခံစတိုင် */
+/* .clean-wish-panel {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    width: 100%;
+    box-sizing: border-box;
+} */
+/* @keyframes letterFadeIn { to { opacity: 1; } } */
+#typewriter-text {
+    font-size: 14px;
+    font-weight: 600;
+    line-height: 1.6;
+    text-align: center;
+    
+    /* စာသားတစ်ခုလုံးကို လှပသော Neon Pink Gradient အရောင်တင်ခြင်း */
+    background: linear-gradient(45deg, #ff3399, #ff007f, #b82dd8);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    
+    display: inline-block;
+    width: 100%;
+    word-break: keep-all;       /* စကားလုံးတစ်လုံးကို အလယ်ကနေ ဖြတ်မချရန် */
+    overflow-wrap: break-word;   /* ဘောင်အနားသတ်ရောက်မှ စကားလုံးလိုက်ဆင်းရန် */
+}
+
+.photo-frame {
+    width: 110px;
+    height: 110px;
+    margin: 0 auto;
+    border-radius: 50%;
+    border: 3px solid #ff007f;
+    overflow: hidden;
+    box-shadow: 0 0 18px rgba(255, 0, 127, 0.5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #222;
+}
+.celebrant-img { width: 100%; height: 100%; object-fit: cover; }
+.default-avatar { font-size: 52px; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+@keyframes bounceIn {
+    from { opacity: 0; transform: scale(0.8); }
+    to { opacity: 1; transform: scale(1); }
+}

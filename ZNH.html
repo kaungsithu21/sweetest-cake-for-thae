@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Realistic Chocolate Sprinkles Cake</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="ZNH.css">
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
+</head>
+<body>
+
+    <div class="card-container">
+        <div id="setup-area">
+            <div class="gift-icon">🎁</div>
+            <h2 class="setup-title">You received a surprise gift!</h2>
+            <p class="setup-subtitle">Click below to open and bake the birthday cake</p>
+            <button class="bake-btn" onclick="startGlowCake()">Bake Chocolate Cake 🍫</button>
+        </div>
+
+        <div id="main-game" class="hidden">
+            <h2 id="instruction" class="game-instruction">Blow the candles & Drag bright sprinkles to decorate! 🌟🎂</h2>
+
+            <div class="cake-area" id="cake-drop-zone" ondragover="allowDrop(event)" ondrop="dropTopping(event)">
+                
+                <div class="cake-container-3d">
+                    
+                    <div class="candles-group">
+                        <div class="candle c-pink" id="candle-1"><div class="flame"></div><div class="smoke"></div></div>
+                        <div class="candle c-blue" id="candle-2"><div class="flame"></div><div class="smoke"></div></div>
+                        <div class="candle c-yellow" id="candle-3"><div class="flame"></div><div class="smoke"></div></div>
+                        <div class="candle c-green" id="candle-4"><div class="flame"></div><div class="smoke"></div></div>
+                    </div>
+
+                    <div class="cake-body-chocolate">
+                        <div class="frosting-top"></div>
+                        <div class="side-sprinkles">
+                            <span class="sp sp1">⭐</span><span class="sp sp2">🔴</span>
+                            <span class="sp sp3">🔷</span><span class="sp sp4">⭐</span>
+                            <span class="sp sp5">💛</span><span class="sp sp6">🟢</span>
+                        </div>
+                    </div>
+                    <div class="cake-plate"></div>
+                </div>
+
+                <div class="decorations" id="decorations"></div>
+            </div>
+
+            <div class="topping-inventory" id="inventory">
+                <p class="inventory-hint">Drag bright toppings onto the cake:</p>
+                <div class="topping-row">
+                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top1">⭐</div>
+                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top2">🍓</div>
+                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top3">🍬</div>
+                    <div class="topping-item" draggable="true" ondragstart="dragStart(event)" id="top4">✨</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="wishes hidden" id="wish-message">
+            <div class="photo-frame">
+                <img src="ZNH.jpg" alt="Birthday Person" class="celebrant-img" onerror="showDefaultAvatar(this)">
+                <div class="default-avatar hidden">🎂</div>
+            </div>
+            
+            <h1 class="neon-glow-title">HAPPY BIRTHDAY! 🎉</h1>
+            
+            <div class="clean-wish-panel">
+                <div id="typewriter-text"></div>
+            </div>
+        </div>
+    </div>
+
+    <audio id="bg-music" src="BIRTHDAY.mp3" loop></audio>
+
+    <script src="ZNH.js"></script>
+</body>
+</html>
