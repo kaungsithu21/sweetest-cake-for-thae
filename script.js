@@ -5,14 +5,17 @@ const totalCandles = 4;
 // 🌟 မွေးနေ့ဆုတောင်းစာသား
 const wishText = "May your life be as bright and colorful as this cake! Wishing you endless sweetness, love, and joy on your special day.\n\nThank you for bringing so much happiness and beautiful smiles into my life. May every single day ahead of you be filled with laughter and all your dreams come true.\n\nHappy Birthday... Thae! 🎂❤️";
 
-// 📱 ဖုန်းပေါ်တွင် Touch စနစ်ဖြင့် Drag ဆွဲနိုင်ရန်အတွက် Window စဖွင့်ကတည်းက Event လိုက်မှတ်ထားမည်
+// 📱 ဖုန်းပေါ်တွင် Touch စနစ်ဖြင့် Drag ဆွဲနိုင်ရန်
 window.addEventListener('DOMContentLoaded', () => {
     initTouchDrag();
+    setupCandleClickBackup(); // ဖုန်းအတွက် လက်နဲ့နှိပ်ပြီး ငြိမ်းလို့ရမည့် စနစ်ကိုပါ အရန်သင့်ပြင်ထားမည်
 });
 
 function startGlowCake() {
     document.getElementById('setup-area').classList.add('hidden');
     document.getElementById('main-game').classList.remove('hidden');
+    
+    // ဖုန်းများတွင် Audio စနစ်ကို အသက်သွင်းရန် User Interaction အရင်လိုအပ်သဖြင့် Button နှိပ်ချိန်မှ စတင်ခေါ်ယူမည်
     initBlowDetection(); 
 }
 
@@ -25,7 +28,7 @@ function showDefaultAvatar(imgElement) {
     }
 }
 
-// Microphone sound analysis
+// 📱 ဖုန်းများအတွက် ပိုမိုအာရုံခံနိုင်စွမ်းမြင့်မားအောင် ပြင်ဆင်ထားသော Microphone Sound Analysis
 function initBlowDetection() {
     navigator.mediaDevices.getUserMedia({ audio: true, video: false })
     .then(function(stream) {
@@ -34,8 +37,8 @@ function initBlowDetection() {
         const microphone = audioContext.createMediaStreamSource(stream);
         const javascriptNode = audioContext.createScriptProcessor(2048, 1, 1);
 
-        analyser.smoothingTimeConstant = 0.75; 
-        analyser.fftSize = 1024;
+        analyser.smoothingTimeConstant = 0.4; // လေမှုတ်လိုက်သည့်လှိုင်းကို ချက်ချင်းသိစေရန် တုံ့ပြန်မှုကို မြှင့်တင်ထားသည်
+        analyser.fftSize = 512;
         microphone.connect(analyser);
         analyser.connect(javascriptNode);
         javascriptNode.connect(audioContext.destination);
@@ -47,7 +50,8 @@ function initBlowDetection() {
             for (let i = 0; i < array.length; i++) { values += array[i]; }
             const average = values / array.length;
 
-            if (average > 52) {
+            // 📱 ဖုန်းမိုက်ခရိုဖုန်းများအတွက် အာရုံခံနိုင်စွမ်းကို ၄၅ သို့ လျှော့ချပေးထားသဖြင့် လေပြင်းပြင်းမှုတ်ရုံဖြင့် အလုပ်လုပ်မည်
+            if (average > 45) {
                 const activeCandles = document.querySelectorAll('.candle .flame:not([style*="display: none"])');
                 if (activeCandles.length > 0) {
                     const candleToBlow = activeCandles[0].parentElement;
@@ -56,9 +60,27 @@ function initBlowDetection() {
             }
         };
     }).catch(function(err) {
-        alert("မွေးနေ့ဖယောင်းတိုင် မှုတ်နိုင်ရန်အတွက် Microphone Permission ကို Allow ပေးလိုက်ပါခင်ဗျာ။");
         console.log("Mic access status: " + err);
+        // မိုက်ခရိုဖုန်း Block ခံထားရပါက အသုံးပြုသူကို အသိပေးရန်
+        alert("မွေးနေ့ဖယောင်းတိုင် မှုတ်နိုင်ရန် ဖုန်း Browser ၏ Microphone Permission ကို Allow ပေးရန် လိုအပ်ပါတယ်ဗျာ။ (သို့မဟုတ်) ဖယောင်းတိုင်များကို လက်ဖြင့်နှိပ်၍လည်း ငြိမ်းနိုင်ပါတယ်ခင်ဗျာ။");
     });
+}
+
+// 📱 အကယ်၍ မိုက်ခရိုဖုန်း လုံးဝအဆင်မပြေပါက ဖယောင်းတိုင်ကို လက်နဲ့နှိပ်ပြီး ငြိမ်းသတ်နိုင်မည့် အရန်စနစ်
+function setupCandleClickBackup() {
+    document.addEventListener('click', function(e) {
+        const candle = e.target.closest('.candle');
+        if (candle) {
+            extinguishCandle(candle);
+        }
+    });
+    // ဖုန်း Touch အတွက်ပါ ထည့်သွင်းခြင်း
+    document.addEventListener('touchstart', function(e) {
+        const candle = e.target.closest('.candle');
+        if (candle) {
+            extinguishCandle(candle);
+        }
+    }, { passive: true });
 }
 
 function extinguishCandle(candleElement) {
@@ -73,14 +95,14 @@ function extinguishCandle(candleElement) {
         if (candlesBlown === 1) {
             const music = document.getElementById('bg-music');
             if (music) {
-                music.play().catch(e => console.log("Audio waiting for focus"));
+                music.play().catch(e => console.log("Audio waiting for user gesture"));
             }
         }
         checkProgress();
     }
 }
 
-// 💻 PC အတွက် သာမန် Drag and Drop စနစ်
+// 💻 PC အတွက် Drag and Drop
 function dragStart(event) {
     event.dataTransfer.setData("text/plain", event.target.id);
     event.dataTransfer.setData("emoji", event.target.innerText);
@@ -108,29 +130,26 @@ function dropTopping(event) {
     }
 }
 
-// 📱 ဖုန်း (Touch Screen) အတွက် သီးသန့် အဆင့်မြင့် Drag စနစ်
+// 📱 ဖုန်း (Touch Screen) အတွက် Drag စနစ်
 function initTouchDrag() {
-    const toppings = document.querySelectorAll('.topping-item'); // HTML ထဲက topping စာလုံး/emoji နေရာ class
-    const cakeArea = document.getElementById('cake-area') || document.querySelector('.cake'); // ကိတ်မုန့်ချရမည့်နေရာဘောင်
+    const toppings = document.querySelectorAll('.topping-item');
+    const cakeArea = document.getElementById('cake-area') || document.querySelector('.cake');
+
+    if (!cakeArea) return;
 
     toppings.forEach(topping => {
         let activeElement = null;
-        let originalX = 0;
-        let originalY = 0;
 
         topping.addEventListener('touchstart', function(e) {
-            // ဖုန်း screen default scroll ပိတ်ရန်
             e.preventDefault();
-            
             const touch = e.touches[0];
-            // ဖုန်းပေါ်တွင် ရွှေ့ရန် ပုံတူပွား Element တစ်ခု ယာယီဆောက်မည်
             activeElement = document.createElement('div');
             activeElement.innerText = topping.innerText;
             activeElement.style.position = 'fixed';
             activeElement.style.left = touch.clientX - 15 + 'px';
             activeElement.style.top = touch.clientY - 15 + 'px';
             activeElement.style.zIndex = '1000';
-            activeElement.style.fontSize = '24px';
+            activeElement.style.fontSize = '28px';
             activeElement.style.pointerEvents = 'none';
             document.body.appendChild(activeElement);
         }, { passive: false });
@@ -139,7 +158,6 @@ function initTouchDrag() {
             if (!activeElement) return;
             e.preventDefault();
             const touch = e.touches[0];
-            // လက်ချောင်းရွှေ့တဲ့နောက်ကို Emoji လိုက်ပါစေခြင်း
             activeElement.style.left = touch.clientX - 15 + 'px';
             activeElement.style.top = touch.clientY - 15 + 'px';
         }, { passive: false });
@@ -150,11 +168,9 @@ function initTouchDrag() {
             const touch = e.changedTouches[0];
             const rect = cakeArea.getBoundingClientRect();
 
-            // လက်လွှတ်လိုက်တဲ့နေရာက ကိတ်မုန့်ဘောင်ထဲမှာ ဟုတ်မဟုတ် စစ်ဆေးခြင်း
             if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
                 touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
                 
-                // ကိတ်မုန့်ထဲ ရောက်သွားရင် မူရင်း Topping ကို ဖျောက်ပြီး ကိတ်ပေါ်တင်မည်
                 topping.remove();
                 toppingCount++;
 
@@ -163,14 +179,12 @@ function initTouchDrag() {
                 createDroppedTopping(topping.innerText, x, y);
             }
 
-            // ယာယီဆောက်ထားတာကို ဖျက်ပစ်မည်
             activeElement.remove();
             activeElement = null;
         });
     });
 }
 
-// ကိတ်မုန့်ပေါ်သို့ Topping ချပေးသည့် Function
 function createDroppedTopping(emoji, x, y) {
     const decorations = document.getElementById('decorations');
     if (!decorations) return;
