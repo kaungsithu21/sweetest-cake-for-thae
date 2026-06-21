@@ -2,8 +2,13 @@ let toppingCount = 0;
 let candlesBlown = 0;
 const totalCandles = 4;
 
-// 🌟 မွေးနေ့ဆုတောင်းစာသား (အပိုဒ်ခွဲများ စနစ်တကျ ပါဝင်ပါသည်)
+// 🌟 မွေးနေ့ဆုတောင်းစာသား
 const wishText = "May your life be as bright and colorful as this cake! Wishing you endless sweetness, love, and joy on your special day.\n\nThank you for bringing so much happiness and beautiful smiles into my life. May every single day ahead of you be filled with laughter and all your dreams come true.\n\nHappy Birthday... Thae! 🎂❤️";
+
+// 📱 ဖုန်းပေါ်တွင် Touch စနစ်ဖြင့် Drag ဆွဲနိုင်ရန်အတွက် Window စဖွင့်ကတည်းက Event လိုက်မှတ်ထားမည်
+window.addEventListener('DOMContentLoaded', () => {
+    initTouchDrag();
+});
 
 function startGlowCake() {
     document.getElementById('setup-area').classList.add('hidden');
@@ -75,7 +80,7 @@ function extinguishCandle(candleElement) {
     }
 }
 
-// Drag and Drop
+// 💻 PC အတွက် သာမန် Drag and Drop စနစ်
 function dragStart(event) {
     event.dataTransfer.setData("text/plain", event.target.id);
     event.dataTransfer.setData("emoji", event.target.innerText);
@@ -99,15 +104,83 @@ function dropTopping(event) {
         const x = event.clientX - rect.left;
         const y = event.clientY - rect.top;
 
-        const decorations = document.getElementById('decorations');
-        const newItem = document.createElement('div');
-        newItem.className = 'dropped-topping';
-        newItem.innerText = emoji;
-        newItem.style.left = `${x}px`;
-        newItem.style.top = `${y}px`;
-
-        decorations.appendChild(newItem);
+        createDroppedTopping(emoji, x, y);
     }
+}
+
+// 📱 ဖုန်း (Touch Screen) အတွက် သီးသန့် အဆင့်မြင့် Drag စနစ်
+function initTouchDrag() {
+    const toppings = document.querySelectorAll('.topping-item'); // HTML ထဲက topping စာလုံး/emoji နေရာ class
+    const cakeArea = document.getElementById('cake-area') || document.querySelector('.cake'); // ကိတ်မုန့်ချရမည့်နေရာဘောင်
+
+    toppings.forEach(topping => {
+        let activeElement = null;
+        let originalX = 0;
+        let originalY = 0;
+
+        topping.addEventListener('touchstart', function(e) {
+            // ဖုန်း screen default scroll ပိတ်ရန်
+            e.preventDefault();
+            
+            const touch = e.touches[0];
+            // ဖုန်းပေါ်တွင် ရွှေ့ရန် ပုံတူပွား Element တစ်ခု ယာယီဆောက်မည်
+            activeElement = document.createElement('div');
+            activeElement.innerText = topping.innerText;
+            activeElement.style.position = 'fixed';
+            activeElement.style.left = touch.clientX - 15 + 'px';
+            activeElement.style.top = touch.clientY - 15 + 'px';
+            activeElement.style.zIndex = '1000';
+            activeElement.style.fontSize = '24px';
+            activeElement.style.pointerEvents = 'none';
+            document.body.appendChild(activeElement);
+        }, { passive: false });
+
+        topping.addEventListener('touchmove', function(e) {
+            if (!activeElement) return;
+            e.preventDefault();
+            const touch = e.touches[0];
+            // လက်ချောင်းရွှေ့တဲ့နောက်ကို Emoji လိုက်ပါစေခြင်း
+            activeElement.style.left = touch.clientX - 15 + 'px';
+            activeElement.style.top = touch.clientY - 15 + 'px';
+        }, { passive: false });
+
+        topping.addEventListener('touchend', function(e) {
+            if (!activeElement) return;
+            
+            const touch = e.changedTouches[0];
+            const rect = cakeArea.getBoundingClientRect();
+
+            // လက်လွှတ်လိုက်တဲ့နေရာက ကိတ်မုန့်ဘောင်ထဲမှာ ဟုတ်မဟုတ် စစ်ဆေးခြင်း
+            if (touch.clientX >= rect.left && touch.clientX <= rect.right &&
+                touch.clientY >= rect.top && touch.clientY <= rect.bottom) {
+                
+                // ကိတ်မုန့်ထဲ ရောက်သွားရင် မူရင်း Topping ကို ဖျောက်ပြီး ကိတ်ပေါ်တင်မည်
+                topping.remove();
+                toppingCount++;
+
+                const x = touch.clientX - rect.left;
+                const y = touch.clientY - rect.top;
+                createDroppedTopping(topping.innerText, x, y);
+            }
+
+            // ယာယီဆောက်ထားတာကို ဖျက်ပစ်မည်
+            activeElement.remove();
+            activeElement = null;
+        });
+    });
+}
+
+// ကိတ်မုန့်ပေါ်သို့ Topping ချပေးသည့် Function
+function createDroppedTopping(emoji, x, y) {
+    const decorations = document.getElementById('decorations');
+    if (!decorations) return;
+    
+    const newItem = document.createElement('div');
+    newItem.className = 'dropped-topping';
+    newItem.innerText = emoji;
+    newItem.style.left = `${x}px`;
+    newItem.style.top = `${y}px`;
+    decorations.appendChild(newItem);
 }
 
 // Progress Verification
@@ -120,17 +193,16 @@ function checkProgress() {
             confetti({ particleCount: 180, spread: 90, origin: { y: 0.6 } });
         }
 
-        // 🌟 စာလုံးတစ်လုံးချင်းစီ စည်းချက်ကျကျ ပေါ်လာစေမည့် Typewriter စနစ်သစ်ကို စတင်ရန်
         initSmoothLetterTypewriter(wishText);
     }
 }
 
-// 🌟 စာလုံးမပြတ်ဘဲ တစ်လုံးချင်းစီ Typewriter စတိုင်အတိုင်း ဖော်ပြပေးမည့် စနစ်သစ် 🌟
+// Typewriter စနစ်
 function initSmoothLetterTypewriter(text) {
     const container = document.getElementById("typewriter-text");
     if (!container) return;
 
-    container.innerHTML = ""; // မျက်နှာပြင်ဟောင်းကို ရှင်းလင်းမည်
+    container.innerHTML = ""; 
 
     let currentParagraph = document.createElement("p");
     currentParagraph.style.margin = "0 0 16px 0";
@@ -143,18 +215,15 @@ function initSmoothLetterTypewriter(text) {
         if (charIndex < text.length) {
             const char = text.charAt(charIndex);
 
-            // \n တွေ့ရင် စာကြောင်းအသစ် (Paragraph အသစ်) ခွဲထွက်မည်
             if (char === "\n") {
-                // ဆက်တိုက် Newline များအတွက် တစ်ကြောင်းထက်ပိုဆင်းရန် စစ်ဆေးခြင်း
                 if (text.charAt(charIndex + 1) === "\n") {
-                    charIndex++; // နောက်ထပ် \n ကိုပါ ကျော်ဖြတ်မည်
+                    charIndex++; 
                 }
                 currentParagraph = document.createElement("p");
                 currentParagraph.style.margin = "0 0 16px 0";
                 currentParagraph.style.minHeight = "1.6em";
                 container.appendChild(currentParagraph);
             } else {
-                // စာလုံးတစ်လုံးချင်းစီကို မမြင်ရသေးဘဲ Span ထဲ ကြိုထည့်ပြီးမှ Fade In လုပ်မည်
                 const letterSpan = document.createElement("span");
                 letterSpan.style.opacity = "0";
                 letterSpan.style.transition = "opacity 0.15s ease-in-out";
@@ -162,7 +231,6 @@ function initSmoothLetterTypewriter(text) {
                 
                 currentParagraph.appendChild(letterSpan);
 
-                // Browser Layout ဆွဲပြီးတာနဲ့ ချက်ချင်း ဖော်ပြပေးရန်
                 requestAnimationFrame(() => {
                     setTimeout(() => {
                         letterSpan.style.opacity = "1";
@@ -171,7 +239,7 @@ function initSmoothLetterTypewriter(text) {
             }
 
             charIndex++;
-            setTimeout(typeNextLetter, 45); // စာလုံးတစ်လုံးချင်း ပေါ်မည့်အရှိန် (၄၅ မီလီစက္ကန့်)
+            setTimeout(typeNextLetter, 45); 
         }
     }
 
